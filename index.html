@@ -1,62 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="Encode/decode Morse code. Audio playback with adjustable speed.">
-<meta name="keywords" content="morse code, morse encoder, morse decoder, CW, telegraph">
-<title>Morse Code — DevKit Tools</title>
-<style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="description" content="Morse code encoder/decoder with audio playback"><title>Morse Code — DevKit Tools</title><style>
 :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--text2:#8b949e;--accent:#58a6ff;--radius:6px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
-.header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;}
-.header a{color:var(--text);text-decoration:none;font-weight:600;font-size:14px;}
-.container{max-width:800px;margin:0 auto;padding:32px 24px;flex:1;width:100%;}
-h1{font-size:28px;font-weight:700;margin-bottom:8px;color:#f0f6fc;}
-.subtitle{color:var(--text2);font-size:14px;margin-bottom:32px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
-.card h2{font-size:16px;margin-bottom:12px;}
-textarea,input,select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px;color:var(--text);font-size:13px;font-family:monospace;resize:vertical;}
-textarea:focus,input:focus,select:focus{outline:none;border-color:var(--accent);}
-.btn{background:#238636;color:#fff;border:none;border-radius:var(--radius);padding:8px 16px;font-size:13px;cursor:pointer;}
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:12px;}
+.header a{color:var(--text);text-decoration:none;font-size:13px;}
+.container{max-width:700px;margin:0 auto;padding:32px 24px;flex:1;width:100%;}
+h1{font-size:24px;color:#f0f6fc;margin-bottom:24px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
+label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:500;}
+textarea,input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px;color:var(--text);font-size:14px;font-family:monospace;resize:vertical;}
+textarea:focus,input:focus{outline:none;border-color:var(--accent);}
+.btn{background:#238636;color:#fff;border:none;border-radius:var(--radius);padding:8px 16px;font-size:13px;cursor:pointer;margin:8px 4px 0 0;}
 .btn:hover{background:#2ea043;}
 .btn.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text);}
-.output{margin-top:12px;word-break:break-all;min-height:40px;}
-.footer{text-align:center;padding:24px;color:var(--text2);font-size:12px;border-top:1px solid var(--border);}
-.footer a{color:var(--accent);text-decoration:none;}
-.label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:500;}
-</style>
-</head>
-<body>
-<div class="header">
-  <a href="https://devkit-tools.xyz">← DevKit Tools</a>
-  <span style="color:var(--text2);font-size:13px;">Morse Code</span>
-</div>
-<div class="container">
-  <h1>Morse Code</h1>
-  <p class="subtitle">Encode/decode Morse code. Audio playback with adjustable speed.</p>
-  <div class="card">
-    <h2>Tool</h2>
-    <div id="tool-area">
-      <label class="label">Input</label>
-      <textarea id="input" rows="6" placeholder="Type or paste here..."></textarea>
-      <button class="btn" onclick="process()" style="margin-top:8px;">Convert</button>
-      <label class="label" style="margin-top:12px;">Output</label>
-      <textarea id="output" rows="6" readonly></textarea>
-    </div>
-  </div>
-</div>
-<div class="footer">
-  <a href="https://devkit-tools.xyz/privacy">Privacy</a> ·
-  <a href="https://devkit-tools.xyz/terms">Terms</a> ·
-  © 2026 DevKit Tools
-</div>
+.morse-output{font-size:24px;letter-spacing:4px;color:var(--accent);font-weight:600;padding:12px;background:var(--bg);border-radius:var(--radius);margin-top:8px;min-height:40px;}
+</style></head><body>
+<div class="header"><a href="https://devkit-tools.xyz">← DevKit</a><span style="color:var(--text2);font-size:13px;">Morse Code</span></div>
+<div class="container"><h1>📻 Morse Code</h1>
+<div class="card"><label>Mode</label><div style="display:flex;gap:8px;margin-bottom:12px;"><button class="btn" id="btn-encode">Text → Morse</button><button class="btn secondary" id="btn-decode">Morse → Text</button></div>
+<label id="in-label">Text</label><textarea id="input" rows="4" placeholder="Enter text...">SOS</textarea>
+<button class="btn" onclick="convert()">Convert</button>
+<label style="margin-top:12px;">Output</label><div class="morse-output" id="output"></div>
+<button class="btn secondary" id="play-btn" onclick="play()" style="display:none;">🔊 Play</button>
+</div></div>
 <script>
-function process() {
-  const v = document.getElementById('input').value;
-  document.getElementById('output').value = v ? 'Processing... (full feature coming soon)' : '';
-}
-</script>
-</body>
-</html>
+const MAP={A:'.-',B:'-...',C:'-.-.',D:'-..',E:'.',F:'..-.',G:'--.',H:'....',I:'..',J:'.---',K:'-.-',L:'.-..',M:'--',N:'-.',O:'---',P:'.--.',Q:'--.-',R:'.-.',S:'...',T:'-',U:'..-',V:'...-',W:'.--',X:'-..-',Y:'-.--',Z:'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',' ':'/'};
+const REV=Object.fromEntries(Object.entries(MAP).map(([k,v])=>[v,k]));
+let mode='encode';
+document.getElementById('btn-encode').addEventListener('click',()=>{mode='encode';document.getElementById('btn-encode').className='btn';document.getElementById('btn-decode').className='btn secondary';document.getElementById('in-label').textContent='Text';document.getElementById('input').value='SOS';convert();});
+document.getElementById('btn-decode').addEventListener('click',()=>{mode='decode';document.getElementById('btn-decode').className='btn';document.getElementById('btn-encode').className='btn secondary';document.getElementById('in-label').textContent='Morse Code';document.getElementById('input').value='... --- ...';convert();});
+function convert(){const v=document.getElementById('input').value.toUpperCase();const o=document.getElementById('output');try{if(mode==='encode'){o.textContent=v.split('').map(c=>MAP[c]||c).join(' ')}else{o.textContent=v.split(/\s+/).map(c=>REV[c]||'?').join('')}}catch(e){o.textContent='Error'}}
+function play(){const morse=document.getElementById('output').textContent;const ctx=new(window.AudioContext||window.webkitAudioContext)();let t=ctx.currentTime;morse.split('').forEach(c=>{const osc=ctx.createOscillator();const gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.frequency.value=800;if(c==='.'){gain.gain.setValueAtTime(0.1,t);osc.start(t);osc.stop(t+0.1)}else if(c==='-'){gain.gain.setValueAtTime(0.1,t);osc.start(t);osc.stop(t+0.3)}t+=c==='.'?0.2:c==='-'?0.4:c===' '?0.2:0.3})}
+convert();document.getElementById('play-btn').style.display='inline-block';
+</script></body></html>
