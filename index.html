@@ -41,6 +41,7 @@ textarea:focus,input:focus{outline:none;border-color:var(--accent);}
 <button class="btn secondary" id="play-btn" onclick="play()" style="display:none;">🔊 Play</button>
 </div></div>
 <script>
+'use strict';
 const MAP={A:'.-',B:'-...',C:'-.-.',D:'-..',E:'.',F:'..-.',G:'--.',H:'....',I:'..',J:'.---',K:'-.-',L:'.-..',M:'--',N:'-.',O:'---',P:'.--.',Q:'--.-',R:'.-.',S:'...',T:'-',U:'..-',V:'...-',W:'.--',X:'-..-',Y:'-.--',Z:'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',' ':'/'};
 const REV=Object.fromEntries(Object.entries(MAP).map(([k,v])=>[v,k]));
 let mode='encode';
