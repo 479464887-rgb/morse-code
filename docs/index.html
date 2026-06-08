@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="description" content="Morse code encoder/decoder with audio playback"><title>Morse Code — DevKit Tools</title><style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="description" content="Morse code encoder/decoder with audio playback"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y=".9em" font-size='90'>🛠</text></svg>">
+<title>Morse Code — DevKit Tools</title><style>
 :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--text2:#8b949e;--accent:#58a6ff;--radius:6px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
@@ -14,7 +16,7 @@ textarea:focus,input:focus{outline:none;border-color:var(--accent);}
 .btn:hover{background:#2ea043;}
 .btn.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text);}
 .morse-output{font-size:24px;letter-spacing:4px;color:var(--accent);font-weight:600;padding:12px;background:var(--bg);border-radius:var(--radius);margin-top:8px;min-height:40px;}
-</style></head><body>
+*:focus-visible{outline:2px solid #58a6ff;outline-offset:2px}::selection{background:rgba(88,166,255,0.3);color:#fff}</style></head><body>
 <div class="header"><a href="https://devkit-tools.xyz">← DevKit</a><span style="color:var(--text2);font-size:13px;">Morse Code</span></div>
 <div class="container"><h1>📻 Morse Code</h1>
 <div class="card"><label>Mode</label><div style="display:flex;gap:8px;margin-bottom:12px;"><button class="btn" id="btn-encode">Text → Morse</button><button class="btn secondary" id="btn-decode">Morse → Text</button></div>
@@ -24,6 +26,7 @@ textarea:focus,input:focus{outline:none;border-color:var(--accent);}
 <button class="btn secondary" id="play-btn" onclick="play()" style="display:none;">🔊 Play</button>
 </div></div>
 <script>
+'use strict';
 const MAP={A:'.-',B:'-...',C:'-.-.',D:'-..',E:'.',F:'..-.',G:'--.',H:'....',I:'..',J:'.---',K:'-.-',L:'.-..',M:'--',N:'-.',O:'---',P:'.--.',Q:'--.-',R:'.-.',S:'...',T:'-',U:'..-',V:'...-',W:'.--',X:'-..-',Y:'-.--',Z:'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',' ':'/'};
 const REV=Object.fromEntries(Object.entries(MAP).map(([k,v])=>[v,k]));
 let mode='encode';
